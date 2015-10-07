@@ -14,6 +14,10 @@ function MasterCtrl($scope, $http, $cookieStore, socket) {
 
   });
 
+  $scope.dispatch = function(request) {
+    socket.emit('dispatch', request) 
+  };
+
     /**
      * Sidebar Toggle & Cookie Control
      */
