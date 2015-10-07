@@ -8,7 +8,6 @@
   <div class="col-lg-12">
     <rd-widget>
       <rd-widget-header icon="fa-tasks" title="Resource Requests">
-        <a href="#">Request</a>
       </rd-widget-header>
       <rd-widget-body classes="large no-padding">
         <div class="table-responsive">
@@ -19,14 +18,13 @@
                <th data-sort-ignore="true" data-hide="phone">Vaccine</th>
               <th data-sort-ignore="true">Quantity </th>
               <th >Dispatched? </th>
+              <th>Send </th>
               <th data-sort-ignore="true" >Outreach Confirmed? </th>
               <th >Request Confirmed ?</th>
             </thead>
             <tbody>
               <tr ng-repeat= "request in requestData">
-                <td data-title=" 'Request Number' ">
-                 {{request.reqId}}
-                </td>
+                <td data-title=" 'Request Number' ">  {{request.reqId}}</td>
                  <td>
                  {{request.requesterPhone}}
                 </td>
@@ -38,15 +36,16 @@
                 </td>
                 <td>
                  {{request.dispatched}}
+                <button ng-hide="{{request.dispatched == true}}" ng-click="dispatch(request)">Dispatch!</button>
+                </td>
+                <td >
+                 <button ng-hide="{{request.dispatched == true}}" ng-click="dispatch(request)">Dispatch!</button>
                 </td>
                 <td>
-                 <button ng-disabled="{{request.dispatched}}" ng-click="dispatch(request)">Dispatch!</button>
+                 {{request.outreachConfirmed}}
                 </td>
                 <td>
-                 {{request.outReachConfirmed}}
-                </td>
-                <td>
-                 {{request.requestConfirmed}}
+                 {{request.requesterConfirmed}}
                 </td>
                 </tr>
             </tbody>
