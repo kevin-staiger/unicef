@@ -40,6 +40,9 @@
                  {{request.dispatched}}
                 </td>
                 <td>
+                 <button ng-disabled="{{request.dispatched}}" ng-click="dispatch(request)">Dispatch!</button>
+                </td>
+                <td>
                  {{request.outReachConfirmed}}
                 </td>
                 <td>
