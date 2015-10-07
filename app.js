@@ -80,8 +80,8 @@ app.get('/create', function(req, res){
         vaccineKey: req.query.vaccineKey,
         qty: req.query.qty,
         reqId: reqId,
-        outReachPhone: null,
-        outReachConfirmed:false,
+        outreachPhone: null,
+        outreachConfirmed:false,
         requesterPhone: req.query.phone,
         requesterConfirmed: false,
         dispatched: false
@@ -93,7 +93,7 @@ app.get('/create', function(req, res){
 app.get('/outreachConfirm', function(req, res){
     var request = requests[req.query.reqId];
     if(request) {
-        request.outReachConfirmed = true;
+        request.outreachConfirmed = true;
         broadcast();
         res.json({ reqId: req.query.reqId, msg: "SUCCESS"});
     }else{
