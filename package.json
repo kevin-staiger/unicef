@@ -13,7 +13,7 @@
     "debug": "~2.0.0",
     "express": "~4.9.0",
     "express-cache-response-directive": "^0.2.0",
-    "fs": "^4.1.0",
+    "fs": "0.0.2",
     "jade": "~1.6.0",
     "lodash": "~2.4.1",
     "logrotate-stream": "^0.2.3",
@@ -35,14 +35,6 @@
   },
   "description": "kms-encrypt-web ======================",
   "main": "app.js",
-  "devDependencies": {
-    "gulp": "^3.8.11",
-    "gulp-concat": "^2.6.0",
-    "gulp-jshint": "^1.11.2",
-    "gulp-rename": "^1.2.2",
-    "gulp-sass": "^2.0.4",
-    "gulp-uglify": "^1.2.0"
-  },
   "repository": {
     "type": "git",
     "url": "https://ewegithub.sb.karmalab.net/EWE/cloudtoolbox-web.git"

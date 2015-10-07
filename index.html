@@ -18,10 +18,13 @@
   <script type="text/javascript" src="bower_components/angular-cookies/angular-cookies.min.js"></script>
   <script type="text/javascript" src="bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
   <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+
   <!-- endbuild -->
   <!-- Custom Scripts -->
   <script type="text/javascript" src="js/module.js"></script>
   <script type="text/javascript" src="js/routes.js"></script>
+  <script type="text/javascript" src="js/services.js"></script>
   <script type="text/javascript" src="js/controllers/alert-ctrl.js"></script>
   <script type="text/javascript" src="js/controllers/master-ctrl.js"></script>
   <script type="text/javascript" src="js/directives/loading.js"></script>
@@ -38,13 +41,13 @@
       <ul class="sidebar">
         <li class="sidebar-main">
           <a ng-click="toggleSidebar()">
-            Cloud Tool Box
+            Unicef Dashboard
             <span class="menu-icon glyphicon glyphicon-transfer"></span>
           </a>
         </li>
         <li class="sidebar-title"><span>NAVIGATION</span></li>
         <li class="sidebar-list">
-          <a href="#">Encrypt <span class="menu-icon fa fa-tachometer"></span></a>
+          <a href="#">Request Table <span class="menu-icon fa fa-tachometer"></span></a>
         </li>
       </ul>
       <div class="sidebar-footer">
@@ -70,7 +73,7 @@
             </div>
             <div class="meta">
               <div class="page">
-                KMS Encryptor
+                Unicef
               </div>
               <div class="breadcrumb-links">
               </div>

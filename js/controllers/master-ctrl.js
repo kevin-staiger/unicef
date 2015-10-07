@@ -3,37 +3,20 @@
 'use strict';
 
 angular.module('RDash')
-    .controller('MasterCtrl', ['$scope', '$http', '$cookieStore', MasterCtrl]);
+    .controller('MasterCtrl', ['$scope', '$http', '$cookieStore', 'socket', MasterCtrl]);
 
-function MasterCtrl($scope, $http, $cookieStore) {
+function MasterCtrl($scope, $http, $cookieStore, socket) {
+
+  socket.on('requestDetail', function (data) {
+    $scope.requestData = data;
+
+    console.log($scope.requestData)
+
+  });
+
     /**
      * Sidebar Toggle & Cookie Control
      */
-
-     $scope.submitForm = function(isValid) {
-        console.log($scope.encryption)
-        if (isValid) {
-          $http({
-            method: "post",
-            url: "/api/encrypt",
-            data: $.param({
-              encryptionData: $scope.encryption.Data,
-              environment: $scope.encryption.env,
-              region: $scope.encryption.region,
-            }),
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded'
-            }
-          })
-            .success(function (data) { 
-              console.log(data.cipher)
-              $scope.cipher = data.cipher 
-            })
-            .error(function(response) { alert(response); });
-        } else {
-          alert('Not Submitted, Error Filling Out Form');
-        }
-    };
 
     var mobileView = 992;
 
