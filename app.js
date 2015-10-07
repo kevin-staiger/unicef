@@ -9,6 +9,7 @@ var cacheResponseDirective = require('express-cache-response-directive');
 var stream = require('logrotate-stream');
 var AWS = require('aws-sdk')
 var _ = require('underscore');
+var request = require('request');
 
 var socketio;
 
@@ -110,16 +111,6 @@ app.get('/requesterConfirm', function(req, res){
 
 });
 
-app.get('/dispatchRequest', function(req, res){
-    var request = requests[req.query.requestId];
-    if(request) {
-        request.dispatched = true;
-        res.json({ reqId: req.query.requestId, msg: "SUCCESS"});
-    }else{
-        res.json({ reqId: req.query.requestId, msg: "FAILURE"});
-    }
-
-});
 
 app.setio = function(io)
 {
@@ -130,7 +121,43 @@ app.setio = function(io)
 
         console.log(requests);
         socket.emit('requestDetail', requests);
+
+        socket.on('dispatch',function(dispatchRequest) {
+            console.log('Got dispatch request');
+            console.dir(dispatchRequest);
+
+            var req = {
+                //flow_name: "contact-outreach",
+                flow_uuid: "74b2b04a-ccb7-43f8-9833-fd1565c4e29a",
+                contacts: ["6ec30506-42e0-4e88-9624-011d6022e261"],
+                //contacts_name: "vaccine-outreach",
+                extra: {
+                    reqId: dispatchRequest.reqId,
+                    vaccineKey: dispatchRequest.vaccineKey,
+                    qty: dispatchRequest.qty,
+                    outreachPhone: dispatchRequest.outreachPhone,
+                    requesterPhone: dispatchRequest.requesterPhone
+                }
+            }
+
+            request.post({
+                headers:
+                {
+                    'content-type' : 'application/json',
+                    'accept'      : 'application/json',
+                    'Authorization': 'Token 54166e63af2e250cdfb632cf779b5d71e0d2b8b8'
+                },
+                url:    "https://api.rapidpro.io/api/v1/runs.json",
+                body:    JSON.stringify(req),
+                rejectUnauthorized: false
+            }, function(error, response, body){
+                console.log(error) ;
+                res.json(response);
+            });
+        });
     });
+
+
 };
 
 // error handlers
