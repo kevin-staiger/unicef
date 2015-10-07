@@ -86,6 +86,7 @@ app.get('/create', function(req, res){
         requesterConfirmed: false,
         dispatched: false
     };
+    broadcast();
     res.json({ msg: "SUCCESS", reqId: reqId });
 });
 
@@ -93,6 +94,7 @@ app.get('/outreachConfirm', function(req, res){
     var request = requests[req.query.requestId];
     if(request) {
         request.outReachConfirmed = true;
+        broadcast();
         res.json({ reqId: req.query.requestId, msg: "SUCCESS"});
     }else{
         res.json({ reqId: req.query.requestId, msg: "FAILURE"});
@@ -104,6 +106,7 @@ app.get('/requesterConfirm', function(req, res){
     var request = requests[req.query.requestId];
     if(request) {
         request.requesterConfirmed = true;
+        broadcast();
         res.json({ reqId: req.query.requestId, msg: "SUCCESS"});
     }else{
         res.json({ reqId: req.query.requestId, msg: "FAILURE"});
@@ -111,6 +114,12 @@ app.get('/requesterConfirm', function(req, res){
 
 });
 
+function broadcast() {
+    if (socketio) {
+        console.log('Re-broadcasting request state');
+        socketio.sockets.emit('requestDetail', requests);
+    }
+}
 
 app.setio = function(io)
 {
