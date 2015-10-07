@@ -3,9 +3,17 @@
 'use strict';
 
 angular.module('RDash')
-    .controller('MasterCtrl', ['$scope', '$http', '$cookieStore', MasterCtrl]);
+    .controller('MasterCtrl', ['$scope', '$http', '$cookieStore', 'socket', MasterCtrl]);
 
-function MasterCtrl($scope, $http, $cookieStore) {
+function MasterCtrl($scope, $http, $cookieStore, socket) {
+
+  socket.on('requestDetail', function (data) {
+    $scope.requestData = data;
+
+    console.log($scope.requestData)
+
+  });
+
     /**
      * Sidebar Toggle & Cookie Control
      */

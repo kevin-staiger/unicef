@@ -10,14 +10,10 @@ var stream = require('logrotate-stream');
 var AWS = require('aws-sdk')
 var _ = require('underscore');
 
+var socketio;
+
 var app = express();
 
-fs.exists('./config.json', function (exists){
-  console.log(exists)
-  if (exists == true) {
-    AWS.config.loadFromPath('./config.json');
-  } 
-})
 
 app.use(
   "/", 
@@ -25,7 +21,6 @@ app.use(
 );
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({}));
-
 
 //load config
 var config = require('./config/config')
@@ -75,6 +70,71 @@ app.use('/', routes);
 app.use('/isActive', isactive);
 app.use('/buildInfo', buildinfo);
 
+var requests = {};
+var lastRequestId = 0;
+
+app.get('/create', function(req, res){
+    var reqId = 'r'+(lastRequestId++);
+    requests[reqId] = {
+        vaccineKey: req.query.vaccineKey,
+        qty: req.query.qty,
+        reqId: reqId,
+        outReachPhone: null,
+        outReachConfirmed:false,
+        requesterPhone: req.query.phone,
+        requesterConfirmed: false,
+        dispatched: false
+    };
+    res.json({ msg: "SUCCESS", reqId: reqId });
+});
+
+app.get('/outreachConfirm', function(req, res){
+    var request = requests[req.query.requestId];
+    if(request) {
+        request.outReachConfirmed = true;
+        res.json({ reqId: req.query.requestId, msg: "SUCCESS"});
+    }else{
+        res.json({ reqId: req.query.requestId, msg: "FAILURE"});
+    }
+
+});
+
+app.get('/requesterConfirm', function(req, res){
+    var request = requests[req.query.requestId];
+    if(request) {
+        request.requesterConfirmed = true;
+        res.json({ reqId: req.query.requestId, msg: "SUCCESS"});
+    }else{
+        res.json({ reqId: req.query.requestId, msg: "FAILURE"});
+    }
+
+});
+
+app.get('/dispatchRequest', function(req, res){
+    var request = requests[req.query.requestId];
+    if(request) {
+        request.dispatched = true;
+        res.json({ reqId: req.query.requestId, msg: "SUCCESS"});
+    }else{
+        res.json({ reqId: req.query.requestId, msg: "FAILURE"});
+    }
+
+});
+
+app.setio = function(io)
+{
+    console.log('called')
+    socketio = io;
+    socketio.sockets.on('connection', function (socket) {
+        console.log('Client ' + socket.id + ' is connected');
+
+        console.log(requests);
+        socket.emit('requestDetail', requests);
+    });
+};
+
+// error handlers
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
     var err = new Error('Not Found');
@@ -82,7 +142,6 @@ app.use(function (req, res, next) {
     next(err);
 });
 
-// error handlers
 
 // development error handler
 // will print stacktrace
