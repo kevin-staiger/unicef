@@ -10,11 +10,16 @@ var stream = require('logrotate-stream');
 var AWS = require('aws-sdk')
 var _ = require('underscore');
 var request = require('request');
-
+var bodyParser = require('body-parser')
 var socketio;
 
 var app = express();
 
+
+app.use( bodyParser.json() );       // to support JSON-encoded bodies
+app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+    extended: true
+}));
 
 app.use(
   "/", 
@@ -74,15 +79,27 @@ app.use('/buildInfo', buildinfo);
 var requests = {};
 var lastRequestId = 0;
 
-app.get('/create', function(req, res){
+app.post('/create', function(req, res){
+    console.log('create request');
     var reqId = 'r'+(lastRequestId++);
+
+    if (req.body.text) {
+        var texts = req.body.text.split(',');
+
+        var vaccineKey = texts[0].replace(/ /g,'');
+        var qty = texts[1].replace(/ /g,'');
+    } else {
+        console.log('no body');
+    }
+
+    console.log('vaccine: '+vaccineKey+', qty: '+qty);
     requests[reqId] = {
-        vaccineKey: req.query.vaccineKey,
-        qty: req.query.qty,
+        vaccineKey: vaccineKey,
+        qty: qty,
         reqId: reqId,
         outreachPhone: null,
         outreachConfirmed:false,
-        requesterPhone: req.query.phone,
+        requesterPhone: null,
         requesterConfirmed: false,
         dispatched: false
     };
@@ -121,10 +138,7 @@ function broadcast() {
     }
 }
 
-app.setio = function(io)
-{
-
-    console.log('called')
+app.setio = function(io) {
     socketio = io;
     socketio.sockets.on('connection', function (socket) {
         console.log('Client ' + socket.id + ' is connected');
