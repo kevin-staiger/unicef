@@ -20,7 +20,7 @@
               <th data-sort-ignore="true">Quantity </th>
               <th >Dispatched? </th>
               <th data-sort-ignore="true" >Outreach Confirmed? </th>
-              <th data-sort-initial="descending" data-hide="all">Health</th>
+              <th >Request Confirmed ?</th>
             </thead>
             <tbody>
               <tr ng-repeat= "request in requestData">
@@ -40,7 +40,10 @@
                  {{request.dispatched}}
                 </td>
                 <td>
-                 {{request.outreachConfirmed?}}
+                 {{request.outReachConfirmed}}
+                </td>
+                <td>
+                 {{request.requestConfirmed}}
                 </td>
                 </tr>
             </tbody>
