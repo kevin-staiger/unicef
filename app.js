@@ -139,7 +139,7 @@ app.setio = function(io)
 
             var req = requests[dispatchRequest.reqId];
             if(req) {
-                req.requesterConfirmed = true;
+                req.dispatched = true;
                 broadcast();
             }
 
