@@ -168,8 +168,7 @@ app.setio = function(io)
                 body:    JSON.stringify(req2),
                 rejectUnauthorized: false
             }, function(error, response, body){
-                console.log(error) ;
-                res.json(response);
+                console.log(error);
             });
         });
     });
