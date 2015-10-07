@@ -91,23 +91,23 @@ app.get('/create', function(req, res){
 });
 
 app.get('/outreachConfirm', function(req, res){
-    var request = requests[req.query.requestId];
+    var request = requests[req.query.reqId];
     if(request) {
         request.outReachConfirmed = true;
         broadcast();
-        res.json({ reqId: req.query.requestId, msg: "SUCCESS"});
+        res.json({ reqId: req.query.reqId, msg: "SUCCESS"});
     }else{
-        res.json({ reqId: req.query.requestId, msg: "FAILURE"});
+        res.json({ reqId: req.query.reqId, msg: "FAILURE"});
     }
 
 });
 
 app.get('/requesterConfirm', function(req, res){
-    var request = requests[req.query.requestId];
+    var request = requests[req.query.reqId];
     if(request) {
         request.requesterConfirmed = true;
         broadcast();
-        res.json({ reqId: req.query.requestId, msg: "SUCCESS"});
+        res.json({ reqId: req.query.reqId, msg: "SUCCESS"});
     }else{
         res.json({ reqId: req.query.requestId, msg: "FAILURE"});
     }
@@ -123,6 +123,7 @@ function broadcast() {
 
 app.setio = function(io)
 {
+
     console.log('called')
     socketio = io;
     socketio.sockets.on('connection', function (socket) {
@@ -135,7 +136,14 @@ app.setio = function(io)
             console.log('Got dispatch request');
             console.dir(dispatchRequest);
 
-            var req = {
+
+            var req = requests[dispatchRequest.reqId];
+            if(req) {
+                req.requesterConfirmed = true;
+                broadcast();
+            }
+
+            var req2 = {
                 //flow_name: "contact-outreach",
                 flow_uuid: "74b2b04a-ccb7-43f8-9833-fd1565c4e29a",
                 contacts: ["6ec30506-42e0-4e88-9624-011d6022e261"],
@@ -157,7 +165,7 @@ app.setio = function(io)
                     'Authorization': 'Token 54166e63af2e250cdfb632cf779b5d71e0d2b8b8'
                 },
                 url:    "https://api.rapidpro.io/api/v1/runs.json",
-                body:    JSON.stringify(req),
+                body:    JSON.stringify(req2),
                 rejectUnauthorized: false
             }, function(error, response, body){
                 console.log(error) ;
